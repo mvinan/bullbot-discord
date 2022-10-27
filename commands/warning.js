@@ -34,6 +34,8 @@ module.exports = {
       content = `⚠️⚠️ Abrir operacion en contra - ${currency.toUpperCase()} ⚠️⚠️`;
     } else if (alert.value === "ct") {
       content = `⚠️⚠️ Esperar indicaciones - ${currency.toUpperCase()} ⚠️⚠️`;
+    } else if (alert.value === "pen") {
+      content = `⚠️⚠️ Poner divisa en pantalla - ${currency.toUpperCase()} ⚠️⚠️`;
     }
 
     const embed = new EmbedBuilder()
