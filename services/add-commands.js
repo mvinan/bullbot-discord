@@ -3,7 +3,7 @@ const path = require("node:path");
 const { Collection } = require("discord.js");
 const client = require("../client.js");
 
-const createCommands = () => {
+const addCommands = () => {
   client.commands = new Collection();
 
   const commandsPath = path.join(__dirname, "../commands");
@@ -27,4 +27,4 @@ const createCommands = () => {
   return client.commands;
 };
 
-module.exports = createCommands;
+module.exports = addCommands;
