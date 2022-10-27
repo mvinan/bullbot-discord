@@ -27,7 +27,7 @@ module.exports = {
       );
 
     await interaction.guild.channels.cache.get(channelId).send({
-      content: `🔴 VENDER - ${currency.toUpperCase()}! 🔴`,
+      content: `@everyone 🔴 VENDER - ${currency.toUpperCase()}! 🔴`,
       embeds: [embed],
     });
     await interaction.reply({
