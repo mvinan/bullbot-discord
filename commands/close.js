@@ -26,7 +26,7 @@ module.exports = {
       );
 
     await interaction.guild.channels.cache.get(channelId).send({
-      content: `🔵 TOMAR PROFIT! ${currency.toUpperCase()} 🔵`,
+      content: `@everyone 🔵 TOMAR PROFIT! ${currency.toUpperCase()} 🔵`,
       embeds: [embed],
     });
     await interaction.reply({

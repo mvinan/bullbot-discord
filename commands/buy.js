@@ -32,7 +32,7 @@ module.exports = {
     });
 
     await interaction.guild.channels.cache.get(channelId).send({
-      content: `🟢 COMPRAR!! ${currency.toUpperCase()}! 🟢`,
+      content: `@everyone 🟢 COMPRAR!! ${currency.toUpperCase()}! 🟢`,
       embeds: [embed],
     });
   },
