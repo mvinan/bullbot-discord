@@ -1,48 +1,58 @@
-const createCommands = require("./services/create-commands.js");
+const dotenv = require("dotenv");
 const { Events } = require("discord.js");
-const client = require("./client.js");
-const { token } = require("./config.js");
 const express = require("express");
-const path = require("path");
+
+const client = require("./client.js");
+const { token, autoDeployCommands } = require("./config.js");
+const deployCommands = require("./services/deploy-commands.js");
+const addCommandsToClient = require("./services/add-commands.js");
+
 const app = express();
-
-createCommands();
-
 const port = process.env.PORT || 8080;
 
-const health = (req, res) => {
-  res.status(200).json({ health: "OK" });
-};
+(() => {
+  dotenv.config();
+  addCommandsToClient();
 
-app.use("/healthz", health);
-
-app.listen(port, () => {
-  console.log(`server started on port ${port}`);
-});
-
-client.on(Events.InteractionCreate, async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
-
-  const command = interaction.client.commands.get(interaction.commandName);
-
-  if (!command) {
-    console.error(`No command matching ${interaction.commandName} was found.`);
-    return;
+  if (autoDeployCommands === "on") {
+    deployCommands();
   }
 
-  try {
-    await command.execute(interaction);
-  } catch (error) {
-    console.error(error);
-    await interaction.reply({
-      content: "There was an error while executing this command!",
-      ephemeral: true,
-    });
-  }
-});
+  const health = (req, res) => {
+    res.status(200).json({ health: "OK" });
+  };
 
-client.once(Events.ClientReady, () => {
-  console.log("Ready!");
-});
+  app.use("/healthz", health);
 
-client.login(token);
+  app.listen(port, () => {
+    console.log(`server started on port ${port}`);
+  });
+
+  client.on(Events.InteractionCreate, async (interaction) => {
+    if (!interaction.isChatInputCommand()) return;
+
+    const command = interaction.client.commands.get(interaction.commandName);
+
+    if (!command) {
+      console.error(
+        `No command matching ${interaction.commandName} was found.`
+      );
+      return;
+    }
+    try {
+      await command.execute(interaction);
+    } catch (error) {
+      console.error(error);
+      await interaction.reply({
+        content: "There was an error while executing this command!",
+        ephemeral: true,
+      });
+    }
+  });
+
+  client.once(Events.ClientReady, () => {
+    console.log("Ready!");
+  });
+
+  client.login(token);
+})();
